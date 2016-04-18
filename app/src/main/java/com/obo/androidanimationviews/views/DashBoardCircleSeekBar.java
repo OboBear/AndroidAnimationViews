@@ -59,8 +59,10 @@ public class DashBoardCircleSeekBar extends View implements ValueAnimator.Animat
             float outHeight = (getHeight() - mSmallCircleRedius * 2 - mStrokeWidth * 2) / 2;
             mRectBlackBg = new RectF(outWith + mStrokeWidth / 2, outHeight + mStrokeWidth / 2, getWidth() - outWith - mStrokeWidth / 2, getHeight() - outHeight - mStrokeWidth / 2);
         }
-        float triangleDegreen = mCurrentDegreenValue;
-        mTrianglePath = new Path();
+        if (mTrianglePath == null) {
+            mTrianglePath = new Path();
+        }
+        mTrianglePath.reset();
         PointF p1 = getPoint(mCurrentDegreenValue, mSmallCircleRedius + mStrokeWidth);
         mTrianglePath.moveTo(p1.x, p1.y);
         p1 = getPoint(mCurrentDegreenValue - 1, mSmallCircleRedius - 3);
@@ -77,7 +79,6 @@ public class DashBoardCircleSeekBar extends View implements ValueAnimator.Animat
             mDrawPaint.setAntiAlias(true);
             mDrawPaint.setStrokeWidth(mStrokeWidth);
             mDrawPaint.setStyle(Paint.Style.STROKE);
-//            mDrawPaint.setStrokeCap(Paint.Cap.ROUND);
         }
         mMatrix.setRotate(mCurrentDegreenValue - 0.5f * 360, getWidth() / 2, getHeight() / 2);
         mSweepGradient.setLocalMatrix(mMatrix);
@@ -93,7 +94,16 @@ public class DashBoardCircleSeekBar extends View implements ValueAnimator.Animat
         return mTrianglePaint;
     }
 
+
+
     static PointF p = new PointF();
+
+    /**
+     *  get the position of the point which we know its degreen & width
+     * @param degreen the rotate degreen of point
+     * @param width radium for the point
+     * @return the position of the point
+     */
     private PointF getPoint(double degreen, float width) {
         float x = (float) (getWidth() / 2 + (width * Math.cos(degreen / 180 * Math.PI)));
         float y = (float) (getHeight() / 2 + (width * Math.sin(degreen / 180 * Math.PI)));
